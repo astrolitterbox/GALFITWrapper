@@ -33,7 +33,6 @@ for califa_id in califa_ids:
 	sky = db.dbUtils.getFromDB('gc_sky', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
 	run = db.dbUtils.getFromDB('run', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
 	rerun = db.dbUtils.getFromDB('rerun', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
-	exptime = 53.9 #SDSS exptime
 	field = db.dbUtils.getFromDB('field', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]	
 	camcol = str(db.dbUtils.getFromDB('camcol', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0])
 	runstr = run2string(run)
@@ -43,7 +42,7 @@ for califa_id in califa_ids:
 	originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
 	outputFilename = 'out_'+califa_id 
 	print originalFilename, inputFilename
-
+	editHeader(filename, originalFile)
 '''
 
 ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
