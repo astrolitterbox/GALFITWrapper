@@ -42,7 +42,7 @@ for califa_id in califa_ids:
 	originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
 	outputFilename = 'out_'+califa_id 
 	print originalFilename, inputFilename
-	editHeader(filename, originalFile)
+	editHeader(filename, originalFile, zpt)
 '''
 
 ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
