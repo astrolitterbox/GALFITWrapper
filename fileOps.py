@@ -1,6 +1,6 @@
 import pyfits
 import numpy as np
-import astLib
+from astLib import astWCS
 
 band = 'r'
 #dataDir = '/media/46F4A27FF4A2713B_/work2/data'
@@ -15,9 +15,10 @@ def getInputFile(i, band):
     #print 'opened the input file'
     return inputImage
 
-def getPixelCoords(ID):
-    WCS=astWCS.WCS(GalaxyParameters.getSDSSUrl(ID)) #changed -- was filledUrl. I don't write coords to my masks..
-    centerCoords = Astrometry.getCenterCoords(ID)
+
+    
+def getPixelCoords(ID, runstr, camcol, field_str, centerCoords):
+    WCS=astWCS.WCS(getSDSSUrl(ID, runstr, camcol, field_str))
     print 'centerCoords', centerCoords
     pixelCoords = WCS.wcs2pix(centerCoords[0], centerCoords[1])
     print 'pixCoords', pixelCoords
