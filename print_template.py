@@ -18,7 +18,7 @@ for califa_id in califa_ids:
 	califa_id = str(califa_id)
 	ofileName = "input/galfit_"+califa_id
 	ofile = open(ofileName, 'wb')
-	writer = csv.writer(ofile)
+	writer = csv.writer(ofile, quoting=csv.QUOTE_NONE)
 
 	try:
 		zpt = db.dbUtils.getFromDB('zpt', dbDir+'CALIFA.sqlite', 'r_tsfieldParams', ' where califa_id = '+califa_id)[0]
