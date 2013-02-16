@@ -69,15 +69,15 @@ for califa_id in califa_ids:
 	InitialLines = ["# INITIAL FITTING PARAMETERS", "# ------------------------------------------------------------------------------",
 	"# Component number: 1",
 	 "0) sersic                 #  Component type", 
-	 "1) "+center[1]+" "+center[0]+" 1 1  #  Position x, y", 
-	 "3) "+mag+"     1          #  Integrated magnitude ",
-	 "4) "+Reff+"     1          #  R_e (effective radius)   [pix]",
+	 "1) "+str(center[1])+" "+str(center[0])+" 1 1  #  Position x, y", 
+	 "3) "+str(mag)+"     1          #  Integrated magnitude ",
+	 "4) "+str(Reff)+"     1          #  R_e (effective radius)   [pix]",
 	 "5) 2.5      1          #  Sersic index n (de Vaucouleurs n=4) ",
 	 "6) 0.0000      0          #     ----- ",
 	 "7) 0.0000      0          #     ----- ",
 	 "8) 0.0000      0          #     ----- ",
-	 "9) "+ba+"      1          #  Axis ratio (b/a)",   
-	"10) "+pa+"     1          #  Position angle (PA) [deg: Up=0, Left=90]", 
+	 "9) "+str(ba)+"      1          #  Axis ratio (b/a)",   
+	"10) "+str(pa)+"     1          #  Position angle (PA) [deg: Up=0, Left=90]", 
 	 "Z) 0                      #  Skip this model in output image?  (yes=1, no=0)"]
 
 	for line in InitialLines:
@@ -87,7 +87,7 @@ for califa_id in califa_ids:
 
 	InitialSkyLines = ["# Component number: 2", 
 	 "0) sky                    #  Component type",
-	 "1) "+sky+"    1          #  Sky background at center of fitting region [ADUs]",
+	 "1) "+str(sky)+"    1          #  Sky background at center of fitting region [ADUs]",
 	 "2) 0     1       #  dsky/dx (sky gradient in x)     [ADUs/pix]",
 	 "3) 0     1       #  dsky/dy (sky gradient in y)     [ADUs/pix]",
 	 "Z) 0                      #  Skip this model in output image?  (yes=1, no=0)",
