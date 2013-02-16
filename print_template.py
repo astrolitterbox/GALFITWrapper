@@ -40,15 +40,15 @@ for califa_id in califa_ids:
 	runstr = run2string(run)
 	field_str = field2string(field)	
 	center = getPixelCoords(califa_id, runstr, camcol, field_str, (ra, dec))	
-	#inputFilename = getFilledUrl(califa_id, runstr, camcol, field_str)
+	inputFilename = getFilledUrl(califa_id, runstr, camcol, field_str)
 	#originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
-	#outputFilename = 'input/out_'+califa_id 
+	outputFilename = 'input/out_'+califa_id 
 	#print originalFilename, inputFilename
 	#editHeader(inputFilename, originalFilename, zpt)
 
 
 	ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
-	"A) "+inputFilename+".fits      # Input data image (FITS file)",
+	"A) "+inputFilename+"      # Input data image (FITS file)",
 	"B) "+outputFilename+".fits        # Output data image block", 
 	"C) # Sigma image name (made from data if blank or none) ", 
 	"D) # Input PSF image and (optional) diffusion kernel", 
