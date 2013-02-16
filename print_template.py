@@ -14,7 +14,7 @@ califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersam
 for califa_id in califa_ids:
 
 	califa_id = str(califa_id)
-	ofileName = "galfit_"+califa_id
+	ofileName = "input/galfit_"+califa_id
 	ofile = open(ofileName, 'wb')
 	writer = csv.writer(ofile)
 
