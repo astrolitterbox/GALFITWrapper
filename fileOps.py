@@ -3,8 +3,8 @@ import numpy as np
 import astLib
 
 band = 'r'
-dataDir = '/media/46F4A27FF4A2713B_/work2/data'
-#dataDir = '../data'
+#dataDir = '/media/46F4A27FF4A2713B_/work2/data'
+dataDir = '../data'
 
 def getInputFile(i, band):
     #print 'filename:', GalaxyParameters.getFilledUrl(listFile, dataDir, i)

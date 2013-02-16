@@ -5,14 +5,16 @@ import sys
 from string import *
 from string import Template
 import csv
+from editHeader import *
 
 #settings
 dbDir = '../db/'
 
-califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersample')
+califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id > 937')
 
 for califa_id in califa_ids:
-
+	print califa_id
+	
 	califa_id = str(califa_id)
 	ofileName = "input/galfit_"+califa_id
 	ofile = open(ofileName, 'wb')
@@ -42,7 +44,7 @@ for califa_id in califa_ids:
 	originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
 	outputFilename = 'out_'+califa_id 
 	print originalFilename, inputFilename
-	editHeader(filename, originalFile, zpt)
+	editHeader(inputFilename, originalFilename, zpt)
 '''
 
 ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
