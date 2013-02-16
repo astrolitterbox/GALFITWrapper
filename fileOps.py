@@ -1,9 +1,10 @@
 import pyfits
 import numpy as np
+import astLib
 
 band = 'r'
+#dataDir = '/media/46F4A27FF4A2713B_/work2/data'
 dataDir = '../data'
-
 
 def getInputFile(i, band):
     #print 'filename:', GalaxyParameters.getFilledUrl(listFile, dataDir, i)
@@ -24,18 +25,18 @@ def getPixelCoords(ID):
     #utils.writeOut(out, 'coords.csv')
     return (pixelCoords[1], pixelCoords[0]) #y -- first, x axis -- second
 
-def getFilledUrl(ID):
-      camcol = GalaxyParameters.camcol
-      field = GalaxyParameters.field
-      field_str = GalaxyParameters.field_str
-      runstr = GalaxyParameters.runstr
+def getFilledUrl(ID, runstr, camcol, field_str):
       dupeList = [162, 164, 249, 267, 319, 437, 445, 464, 476, 477, 480, 487, 498, 511, 537, 570, 598, 616, 634, 701, 767, 883, 939]
       if band == 'r':
         fpCFile = dataDir+'/filled2/fpC-'+runstr+'-'+band+camcol+'-'+field_str+'.fits'
-        if (ID +1) in dupeList:
+        if (int(ID) +1) in dupeList:
                 fpCFile = dataDir+'/filled3/fpC-'+runstr+'-'+band+camcol+'-'+field_str+'.fits'
       else:
               fpCFile = dataDir+'/filled_'+band+'/fpC-'+runstr+'-'+band+camcol+'-'+field_str+'.fits'
-              if(ID + 1) in dupeList:
+              if(int(ID) + 1) in dupeList:
                 fpCFile = fpCFile+'B'
+      return fpCFile
+      
+def getSDSSUrl(ID, runstr, camcol, field_str):
+      fpCFile = dataDir+'/SDSS/'+band+'/fpC-'+runstr+'-'+band+camcol+'-'+field_str+'.fit.gz'
       return fpCFile

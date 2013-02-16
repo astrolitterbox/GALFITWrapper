@@ -1,25 +1,50 @@
 import pyfits, numpy as np, db
 from utils import *
+from fileOps import *
 import sys
 from string import *
 from string import Template
 import csv
 
-ofileName = "out.csv"
-ofile = open(ofileName, 'wb')
-writer = csv.writer(ofile)
+#settings
+dbDir = '../db/'
 
-inputFilename = 'here_'
-outputFilename =
-zpt = 
-centerX = 
-centerY = 
-mag = 
-Reff = 
-ba = 
-pa = 
-sky = 
+califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersample')
 
+for califa_id in califa_ids:
+
+	califa_id = str(califa_id)
+	ofileName = "galfit_"+califa_id
+	ofile = open(ofileName, 'wb')
+	writer = csv.writer(ofile)
+
+	try:
+		zpt = db.dbUtils.getFromDB('zpt', dbDir+'CALIFA.sqlite', 'r_tsfieldParams', ' where califa_id = '+califa_id)[0]
+	except IndexError:
+		zpt = -24.029 #mean of r band zpts
+	print califa_id, 'CID', zpt, 'zpt'
+	centerX = 100
+	centerY = 100
+	mag = db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
+	Reff = 0.8*db.dbUtils.getFromDB('hlma', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
+
+	ba = db.dbUtils.getFromDB('ba', dbDir+'CALIFA.sqlite', 'nadine', ' where califa_id = '+califa_id)[0]
+	pa = db.dbUtils.getFromDB('pa', dbDir+'CALIFA.sqlite', 'nadine', ' where califa_id = '+califa_id)[0]
+	sky = db.dbUtils.getFromDB('gc_sky', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
+	run = db.dbUtils.getFromDB('run', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
+	rerun = db.dbUtils.getFromDB('rerun', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
+	exptime = 53.9 #SDSS exptime
+	field = db.dbUtils.getFromDB('field', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]	
+	camcol = str(db.dbUtils.getFromDB('camcol', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0])
+	runstr = run2string(run)
+	field_str = field2string(field)	
+	
+	inputFilename = getFilledUrl(califa_id, runstr, camcol, field_str)
+	originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
+	outputFilename = 'out_'+califa_id 
+	print originalFilename, inputFilename
+
+'''
 
 ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
 "A) "+inputFilename+".fits      # Input data image (FITS file)",
@@ -70,4 +95,4 @@ InitialSkyLines = ["# Component number: 2",
 for line in InitialSkyLines:
   print "out", line
   writer.writerow([line])
-ofile.close()  
+ofile.close() ''' 
