@@ -11,5 +11,6 @@ def editHeader(filename, originalFile):
 	HDUList[0].header = OriginalHeader
 	HDUList[0].header["SOFTBIAS"] = 0
 	HDUList[0].header["BZERO"] = 0
+	HDUList[0].header["ZPT"] = zpt
 	print HDUList[0].header
 	HDUList.flush()
