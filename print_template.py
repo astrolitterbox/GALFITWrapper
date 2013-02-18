@@ -1,11 +1,12 @@
 import pyfits, numpy as np, db
-from utils import *
+
 from fileOps import *
 import sys
 from string import *
 from string import Template
 import csv
 from editHeader import *
+
 
 
 
