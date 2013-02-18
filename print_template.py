@@ -10,7 +10,11 @@ from editHeader import *
 #settings
 dbDir = '../db/'
 
-califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id > 937')
+#califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersample')
+
+#califa_ids = [164, 319, 437, 445, 464, 476, 477, 480, 487, 498, 511, 537, 570, 598, 616, 634, 701, 767, 883, 939, 161, 163, 248, 266, 318, 436, 444, 463, 475, 476, 479, 486, 497, 510, 536,569, 597, 615, 633, 700, 766, 882, 938]
+
+
 
 for califa_id in califa_ids:
 	print califa_id
@@ -18,12 +22,12 @@ for califa_id in califa_ids:
 	califa_id = str(califa_id)
 	ofileName = "input/galfit_"+califa_id
 	ofile = open(ofileName, 'wb')
-	writer = csv.writer(ofile, quoting=csv.QUOTE_NONE)
+	#writer = csv.writer(ofile, quoting=csv.QUOTE_NONE)
 
 	try:
-		zpt = db.dbUtils.getFromDB('zpt', dbDir+'CALIFA.sqlite', 'r_tsfieldParams', ' where califa_id = '+califa_id)[0]
+		zpt = -1*(db.dbUtils.getFromDB('zpt', dbDir+'CALIFA.sqlite', 'r_tsfieldParams', ' where califa_id = '+califa_id)[0])
 	except IndexError:
-		zpt = -24.029 #mean of r band zpts
+		zpt = 24.029 #mean of r band zpts -- NOTE that it's multiplied by -1, because SDSS stores them so
 	print califa_id, 'CID', zpt, 'zpt'
 	mag = db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
 	Reff = 0.8*db.dbUtils.getFromDB('hlma', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
@@ -42,13 +46,13 @@ for califa_id in califa_ids:
 	center = getPixelCoords(califa_id, runstr, camcol, field_str, (ra, dec))	
 	inputFilename = getFilledUrl(califa_id, runstr, camcol, field_str)
 	#originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
-	outputFilename = 'input/out_'+califa_id 
+	outputFilename = '../output/'+califa_id 
 	#print originalFilename, inputFilename
 	#editHeader(inputFilename, originalFilename, zpt)
 
 
 	ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
-	"A) "+inputFilename+"      # Input data image (FITS file)",
+	"A) ../"+inputFilename+"      # Input data image (FITS file)",
 	"B) "+outputFilename+".fits        # Output data image block", 
 	"C) # Sigma image name (made from data if blank or none) ", 
 	"D) # Input PSF image and (optional) diffusion kernel", 
@@ -64,7 +68,8 @@ for califa_id in califa_ids:
 
 	for line in ControlLines:
 	  print "out", line
-	  writer.writerow([line])
+	  #writer.writerow([line])
+	  ofile.write(line+"\n")
 	    
 	InitialLines = ["# INITIAL FITTING PARAMETERS", "# ------------------------------------------------------------------------------",
 	"# Component number: 1",
@@ -82,8 +87,9 @@ for califa_id in califa_ids:
 
 	for line in InitialLines:
 	  print "out", line
-	  writer.writerow([line])
+	  #writer.writerow([line])
 
+	  ofile.write(line+"\n")
 
 	InitialSkyLines = ["# Component number: 2", 
 	 "0) sky                    #  Component type",
@@ -95,5 +101,6 @@ for califa_id in califa_ids:
 
 	for line in InitialSkyLines:
 	  print "out", line
-	  writer.writerow([line])
+	  #writeOut([line], ofileName)
+	  ofile.write(line+"\n")
 	ofile.close()
