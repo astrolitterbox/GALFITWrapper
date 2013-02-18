@@ -1,10 +1,16 @@
 import pyfits
 import numpy as np
 from astLib import astWCS
+import db
+from utils import *
 
+#settings
+dbDir = '../db/'
 band = 'r'
 #dataDir = '/media/46F4A27FF4A2713B_/work2/data'
 dataDir = '../data'
+
+
 
 def getInputFile(i, band):
     #print 'filename:', GalaxyParameters.getFilledUrl(listFile, dataDir, i)
@@ -16,15 +22,49 @@ def getInputFile(i, band):
     return inputImage
 
 
+def galaxyParams(califa_id):
+  	califa_id = str(califa_id)
+	try:
+		zpt = -1*(db.dbUtils.getFromDB('zpt', dbDir+'CALIFA.sqlite', 'r_tsfieldParams', ' where califa_id = '+califa_id)[0])
+	except IndexError:
+		zpt = 24.029 #mean of r band zpts -- NOTE that it's multiplied by -1, because SDSS stores them so
+	print califa_id, 'CID', zpt, 'zpt'
+	mag = db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
+	Reff = 0.8*db.dbUtils.getFromDB('hlma', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
+	ra = db.dbUtils.getFromDB('ra', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
+	dec = db.dbUtils.getFromDB('dec', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
+
+	ba = db.dbUtils.getFromDB('ba', dbDir+'CALIFA.sqlite', 'nadine', ' where califa_id = '+califa_id)[0]
+	pa = db.dbUtils.getFromDB('pa', dbDir+'CALIFA.sqlite', 'nadine', ' where califa_id = '+califa_id)[0]
+	sky = db.dbUtils.getFromDB('gc_sky', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
+	run = db.dbUtils.getFromDB('run', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
+	rerun = db.dbUtils.getFromDB('rerun', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
+	field = db.dbUtils.getFromDB('field', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]	
+	camcol = str(db.dbUtils.getFromDB('camcol', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0])
+	runstr = run2string(run)
+	field_str = field2string(field)	
+	center = getPixelCoords(califa_id, runstr, camcol, field_str, (ra, dec))	
+	inputFilename = getFilledUrl(califa_id, runstr, camcol, field_str)
+	return zpt, mag, Reff, ra, dec, ba, pa, sky, run, rerun, field, camcol, runstr, field_str, center, inputFilename
+
+
+def getWCSCoords(ID, runstr, camcol, field_str, centerCoords):
+    WCS=astWCS.WCS(getSDSSUrl(ID, runstr, camcol, field_str))
+    wcsCoords = WCS.pix2wcs(float(centerCoords[1]), float(centerCoords[0]))
+    return wcsCoords
     
 def getPixelCoords(ID, runstr, camcol, field_str, centerCoords):
     WCS=astWCS.WCS(getSDSSUrl(ID, runstr, camcol, field_str))
-    print 'centerCoords', centerCoords
-    pixelCoords = WCS.wcs2pix(centerCoords[0], centerCoords[1])
-    print 'pixCoords', pixelCoords
-    out = [ID, centerCoords[0], centerCoords[1], pixelCoords[0], pixelCoords[1]]
-    #utils.writeOut(out, 'coords.csv')
+    #print 'centerCoords', centerCoords
+    pixelCoords = WCS.wcs2pix(float(centerCoords[0]), float(centerCoords[1]))
+    #print 'pixCoords', pixelCoords
     return (pixelCoords[1], pixelCoords[0]) #y -- first, x axis -- second
+
+def getAngularSize(ID, runstr, camcol, field_str, angle):
+    #returns angular size in arcseconds -- not in degrees, as the original WCS!
+    WCS = astWCS.WCS(getSDSSUrl(ID, runstr, camcol, field_str))
+    angularSize = WCS.getPixelSizeDeg() * angle * 3600
+    return angularSize
 
 def getFilledUrl(ID, runstr, camcol, field_str):
       dupeList = [162, 164, 249, 267, 319, 437, 445, 464, 476, 477, 480, 487, 498, 511, 537, 570, 598, 616, 634, 701, 767, 883, 939]

@@ -7,8 +7,7 @@ from string import Template
 import csv
 from editHeader import *
 
-#settings
-dbDir = '../db/'
+
 
 #califa_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'mothersample')
 
@@ -18,38 +17,10 @@ dbDir = '../db/'
 
 for califa_id in califa_ids:
 	print califa_id
-	
-	califa_id = str(califa_id)
 	ofileName = "input/galfit_"+califa_id
 	ofile = open(ofileName, 'wb')
-	#writer = csv.writer(ofile, quoting=csv.QUOTE_NONE)
-
-	try:
-		zpt = -1*(db.dbUtils.getFromDB('zpt', dbDir+'CALIFA.sqlite', 'r_tsfieldParams', ' where califa_id = '+califa_id)[0])
-	except IndexError:
-		zpt = 24.029 #mean of r band zpts -- NOTE that it's multiplied by -1, because SDSS stores them so
-	print califa_id, 'CID', zpt, 'zpt'
-	mag = db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
-	Reff = 0.8*db.dbUtils.getFromDB('hlma', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
-	ra = db.dbUtils.getFromDB('ra', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
-	dec = db.dbUtils.getFromDB('dec', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
-
-	ba = db.dbUtils.getFromDB('ba', dbDir+'CALIFA.sqlite', 'nadine', ' where califa_id = '+califa_id)[0]
-	pa = db.dbUtils.getFromDB('pa', dbDir+'CALIFA.sqlite', 'nadine', ' where califa_id = '+califa_id)[0]
-	sky = db.dbUtils.getFromDB('gc_sky', dbDir+'CALIFA.sqlite', 'gc_results', ' where califa_id = '+califa_id)[0]
-	run = db.dbUtils.getFromDB('run', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
-	rerun = db.dbUtils.getFromDB('rerun', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]
-	field = db.dbUtils.getFromDB('field', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0]	
-	camcol = str(db.dbUtils.getFromDB('camcol', dbDir+'CALIFA.sqlite', 'mothersample', ' where califa_id = '+califa_id)[0])
-	runstr = run2string(run)
-	field_str = field2string(field)	
-	center = getPixelCoords(califa_id, runstr, camcol, field_str, (ra, dec))	
-	inputFilename = getFilledUrl(califa_id, runstr, camcol, field_str)
-	#originalFilename = getSDSSUrl(califa_id, runstr, camcol, field_str)
+	zpt, mag, Reff, ra, dec, ba, pa, sky, run, rerun, field, camcol, runstr, field_str, center, inputFilename = galaxyParams(califa_id)
 	outputFilename = '../output/'+califa_id 
-	#print originalFilename, inputFilename
-	#editHeader(inputFilename, originalFilename, zpt)
-
 
 	ControlLines = ["================================================================================", "# IMAGE and GALFIT CONTROL PARAMETERS", 
 	"A) ../"+inputFilename+"      # Input data image (FITS file)",
