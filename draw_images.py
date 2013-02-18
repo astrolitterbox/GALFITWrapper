@@ -1,8 +1,10 @@
-#generates LaTeX source of thumbnails
+#generates images
 import numpy as np
 import matplotlib.pyplot as plt
 import pyfits
 import matplotlib.cm as cm
+import db
+dbDir = '../db/'
 
 def clip_image(inputImage):
     sigma = np.std(inputImage)
@@ -10,14 +12,15 @@ def clip_image(inputImage):
     ret = np.clip(inputImage, mean-3*sigma, mean+3*sigma)
     return ret
 
-for califa_id in range(1, 2):
+for califa_id in range(100, 3):  	
   f = pyfits.open("output/"+str(califa_id)+".fits")
   inputImage = f[1].data
   modelImage = f[2].data
   residualImage = f[3].data
   
-  fig = plt.figure(figsize = (8, 5))
+  fig = plt.figure(figsize = (10, 5))
   ax0 = fig.add_subplot(131)
+  
   p = ax0.imshow(clip_image(inputImage), cmap=cm.hot, interpolation='nearest')
   #p.set_clim(-3,1000)
   ax0.xaxis.set_visible(False)
@@ -31,9 +34,8 @@ for califa_id in range(1, 2):
   ax2 = fig.add_subplot(133)
   ax2.imshow(clip_image(residualImage), cmap=cm.hot)
   ax2.xaxis.set_visible(False)
-  ax2.yaxis.set_visible(False)
-  
-  plt.savefig("img/"+str(califa_id), bbox_inches="tight")
+  ax2.yaxis.set_visible(False) 
+  plt.savefig("img/"+str(califa_id)+".pdf", bbox_inches="tight", dpi=72)
     
   
   
