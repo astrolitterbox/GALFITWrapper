@@ -21,7 +21,44 @@ def getInputFile(i, band):
     #print 'opened the input file'
     return inputImage
 
+def getMorphNumbers(morphtype, resolution):
+  
+  numbers = np.empty((morphtype.shape), dtype=int)
+  if resolution == 'hubtype':
 
+    numbers[np.where(morphtype == 'E0')] = 0
+    numbers[np.where(morphtype == 'E1')] = 1
+    numbers[np.where(morphtype == 'E2')] = 2
+    numbers[np.where(morphtype == 'E3')] = 3
+    numbers[np.where(morphtype == 'E4')] = 4  
+    numbers[np.where(morphtype == 'E5')] = 5  
+    numbers[np.where(morphtype == 'E6')] = 6
+    numbers[np.where(morphtype == 'E7')] = 7
+    numbers[np.where(morphtype == 'S0')] = 8
+    numbers[np.where(morphtype == 'S0a')] = 9
+    numbers[np.where(morphtype == 'Sa')] = 10
+    numbers[np.where(morphtype == 'Sab')] = 11
+    numbers[np.where(morphtype == 'Sb')] = 12 
+    numbers[np.where(morphtype == 'Sbc')] = 13  
+    numbers[np.where(morphtype == 'Sc')] = 14
+    numbers[np.where(morphtype == 'Scd')] = 15
+    numbers[np.where(morphtype == 'Sd')] = 16
+    numbers[np.where(morphtype == 'Sdm')] = 17
+    numbers[np.where(morphtype == 'Sm')] = 18
+    numbers[np.where(morphtype == 'Ir')] = 19  
+      
+  elif resolution == 'barredness':
+    numbers[np.where(morphtype == 'A')] = 0
+    numbers[np.where(morphtype == 'AB')] = 1
+    numbers[np.where(morphtype == 'B')] = 2
+
+  elif resolution == 'merger':
+   numbers[np.where(morphtype == 'I')] = 0
+   numbers[np.where(morphtype == 'M')] = 1   
+ 
+  return numbers
+  
+  
 def galaxyParams(califa_id):
   	califa_id = str(califa_id)
 	try:
