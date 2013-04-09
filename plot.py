@@ -13,8 +13,10 @@ v22_ids = db.dbUtils.getFromDB('califa_id', dbDir+'CALIFA.sqlite', 'vf')
 v22_ids = sqlify(v22_ids)
 
 n = db.dbUtils.getFromDB('n', dbDir+'CALIFA.sqlite', 'galfit')
-g = np.asarray(db.dbUtils.getFromDB('g', dbDir+'CALIFA.sqlite', 'gc_results'))
-r = np.asarray(db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'gc_results'))
+#g = np.asarray(db.dbUtils.getFromDB('g', dbDir+'CALIFA.sqlite', 'gc_results'))
+g = np.asarray(db.dbUtils.getFromDB('PetroMag_g', dbDir+'CALIFA.sqlite', 'mothersample'))
+r = np.asarray(db.dbUtils.getFromDB('PetroMag_r', dbDir+'CALIFA.sqlite', 'mothersample'))
+#r = np.asarray(db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'gc_results'))
 Mr = np.asarray(db.dbUtils.getFromDB('r', dbDir+'CALIFA.sqlite', 'kcorrect'))
 v22 = np.asarray(db.dbUtils.getFromDB('v22', dbDir+'CALIFA.sqlite', 'vf'))
 
@@ -74,7 +76,7 @@ types = ['EO', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'S0', 'S0a', 'Sa', 'Sab
 print morph
 
 
-clipped_col = np.clip(col, np.mean(col)-2*np.std(col), np.mean(col)+2*np.std(col))
+clipped_col = np.clip(col, np.mean(col)-3*np.std(col), np.mean(col)+3*np.std(col))
 
 fig = plt.figure(figsize=(10, 8))
 ax = fig.add_subplot(111)

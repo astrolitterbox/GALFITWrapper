@@ -16,7 +16,7 @@ def getInputFile(i, band):
     #print 'filename:', GalaxyParameters.getFilledUrl(listFile, dataDir, i)
     inputFile = pyfits.open(GalaxyParameters.getFilledUrl(i, band))
     inputImage = inputFile[0].data
-    if band != 'r' or (i == 882) or (i == 576):
+    if band != 'r' or (i == 882) or (i == 577):
        inputImage-=1000
     #print 'opened the input file'
     return inputImage
