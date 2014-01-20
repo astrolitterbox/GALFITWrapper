@@ -57,19 +57,6 @@ for califa_id in califa_ids:
 	 "9) "+str(ba)+"      1          #  Axis ratio (b/a)",   
 	"10) "+str(pa)+"     1          #  Position angle (PA) [deg: Up=0, Left=90]", 
 	 "Z) 0                      #  Skip this model in output image?  (yes=1, no=0)",
-	"# Component number: 2",
-	 "0) sersic                 #  Component type", 
-	 "1) "+str(center[1])+" "+str(center[0])+" 1 1  #  Position x, y", 
-	 "3) "+str(mag)+"     1          #  Integrated magnitude ",
-	 "4) "+str(Reff)+"     1          #  R_e (effective radius)   [pix]",
-	 "5) 2.5      1          #  Sersic index n (de Vaucouleurs n=4) ",
-	 "6) 0.0000      0          #     ----- ",
-	 "7) 0.0000      0          #     ----- ",
-	 "8) 0.0000      0          #     ----- ",
-	 "9) "+str(ba)+"      1          #  Axis ratio (b/a)",   
-	"10) "+str(pa)+"     1          #  Position angle (PA) [deg: Up=0, Left=90]", 
-	 "Z) 0                      #  Skip this model in output image?  (yes=1, no=0)"]
-
 
 	for line in InitialLines:
 	  print "out", line
